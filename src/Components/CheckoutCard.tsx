@@ -14,6 +14,7 @@ export default function CheckoutCard({
       <p>Quantity: {quantity} </p>
       <p>price: {price.toFixed(2)}$</p>
       <p>total: {total.toFixed(2)}$</p>
+      <button> Remove </button>
     </div>
   );
 }

@@ -19,6 +19,7 @@ interface ClothingData {
 export interface ProductInfo {
   // Links state entry to clothing catalog independently of array order
   id: number;
+  image: string;
   name: string;
   fit: Fit;
   category: ClothingCategory;
@@ -27,12 +28,15 @@ export interface ProductInfo {
   size: ClothingSize;
   //selected quantity
   quantity: number;
+  //remaining quantity
+  remQuantity: number;
   price: number;
 }
 //Used when Add To Cart is clicked. Captures what is in the Cart
 export interface CartItem {
   // A new UUID identifies each cart entry
   id: string;
+  image: string;
   name: string;
   quantity: number;
   price: number;
@@ -43,12 +47,14 @@ export default function ThriftHappens({ data }: ClothingData) {
     data.map((data) => ({
       id: data.id,
       name: data.name,
+      image: data.image,
       fit: data.fit,
       category: data.category,
       color: data.color,
       description: data.description,
       size: data.size,
-      quantity: data.quantity,
+      quantity: data.itemQuantity,
+      remQuantity: data.quantity,
       price: data.price,
     })),
   );
@@ -74,9 +80,9 @@ export default function ThriftHappens({ data }: ClothingData) {
       return [...prevCart, { ...cartItem }];
     });
   }
-
+  //sends info to ItemContainer and CheckoutContainer, div ThriftHappens to adjust layout of page.
   return (
-    <div>
+    <div className="ThriftHappens">
       <ItemsContainer
         data={data}
         productInfo={productInfo}

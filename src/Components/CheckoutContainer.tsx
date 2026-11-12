@@ -18,6 +18,7 @@ export default function CheckoutContainer({
           ? `Cart total: ${cartData.reduce((acc, item) => acc + item.total, 0).toFixed(2)}$`
           : "Cart is empty"}
       </h2>
+      <button>Empty Cart</button>
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default function ProductContainer({
   handleAddToCart,
 }: ProductContainerProps) {
   return (
-    <div className="ProductContainer">
+    <div className="ItemContainer">
       {data.map((clothes) => {
         const info = productInfo.find((info) => info.id === clothes.id);
         if (!info) return null;

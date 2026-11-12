@@ -167,7 +167,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -181,4 +181,35 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+.ThriftHappens {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+  width: 80%;
+  margin: auto;
+  align-items: start;
+}
+.ItemContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.ItemCard {
+  width: 150px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin: 5px;
+}
+.CheckoutContainer {
+  width: 90%;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.CheckoutCard {
+  width: 50%;
+  border: green solid;
+  border-radius: 5px;
+  margin: 5px;
 }

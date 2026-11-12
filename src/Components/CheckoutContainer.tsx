@@ -3,15 +3,17 @@ import CheckoutCard from "./CheckoutCard";
 
 interface CheckoutContainerProps {
   cartData: CartItem[];
+  handleRemoveCartItem: (id:string) => void; 
 }
 
 export default function CheckoutContainer({
   cartData,
+  handleRemoveCartItem,
 }: CheckoutContainerProps) {
   return (
     <div className="CheckoutContainer">
       {cartData.map((item) => (
-        <CheckoutCard key={item.id} {...item} />
+        <CheckoutCard key={item.id} {...item} removeCheckoutItem={handleRemoveCartItem}/>
       ))}
       <h2>
         {cartData.length > 0

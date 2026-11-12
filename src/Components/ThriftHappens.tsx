@@ -62,6 +62,11 @@ export default function ThriftHappens({ data }: ClothingData) {
   //start with empty cart
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
+
+
+  // HANDLERS //////////////////////////////////////
+
+
   //delta represents the change in value for the cart/add to btn...
   //this function uses the latest state, creates a new array using map,
   // and spreads copies only matching the object being clicked
@@ -69,7 +74,7 @@ export default function ThriftHappens({ data }: ClothingData) {
     setProductInfo((prevData) =>
       prevData.map((info) =>
         info.id === id
-          ? { ...info, quantity: Math.max(0, info.quantity + delta) }
+          ? { ...info, quantity: Math.max(0, Math.min(info.quantity + delta)) }
           : info,
       ),
     );
@@ -80,6 +85,15 @@ export default function ThriftHappens({ data }: ClothingData) {
       return [...prevCart, { ...cartItem }];
     });
   }
+
+  function handleRemoveCartItem(id:string){
+    setCartItems((prevCart) => 
+      prevCart.filter((item) => item.id !== id)
+  ); 
+  }
+
+
+  ///////////////////////////////////////////////
   //sends info to ItemContainer and CheckoutContainer, div ThriftHappens to adjust layout of page.
   return (
     <div className="ThriftHappens">
@@ -89,7 +103,7 @@ export default function ThriftHappens({ data }: ClothingData) {
         handleQuantityAdjust={handleQuantityAdjust}
         handleAddToCart={handleAddToCart}
       />
-      <CheckoutContainer cartData={cartItems} />
+      <CheckoutContainer cartData={cartItems} handleRemoveCartItem={handleRemoveCartItem} />
     </div>
   );
 }

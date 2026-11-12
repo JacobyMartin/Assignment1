@@ -3,9 +3,14 @@
 // and ItemsContainer.
 // main brain of the application
 import { useState } from "react";
-import type { ClothingProduct } from "../data/data";
+import type {
+  ClothingProduct,
+  Fit,
+  ClothingCategory,
+  ClothingSize,
+} from "../data/data";
 import ItemsContainer from "./ItemsContainer";
-import CartContainer from "./CheckoutContainer";
+import CheckoutContainer from "./CheckoutContainer";
 
 interface ClothingData {
   data: ClothingProduct[];
@@ -14,9 +19,14 @@ interface ClothingData {
 export interface ProductInfo {
   // Links state entry to clothing catalog independently of array order
   id: number;
+  name: string;
+  fit: Fit;
+  category: ClothingCategory;
+  color: string;
+  description: string;
+  size: ClothingSize;
   //selected quantity
   quantity: number;
-  //unit price not total
   price: number;
 }
 //Used when Add To Cart is clicked. Captures what is in the Cart
@@ -32,6 +42,12 @@ export default function ThriftHappens({ data }: ClothingData) {
   const [productInfo, setProductInfo] = useState<ProductInfo[]>(() =>
     data.map((data) => ({
       id: data.id,
+      name: data.name,
+      fit: data.fit,
+      category: data.category,
+      color: data.color,
+      description: data.description,
+      size: data.size,
       quantity: data.quantity,
       price: data.price,
     })),
@@ -61,13 +77,13 @@ export default function ThriftHappens({ data }: ClothingData) {
 
   return (
     <div>
-      <ProductContainer
+      <ItemsContainer
         data={data}
         productInfo={productInfo}
         handleQuantityAdjust={handleQuantityAdjust}
         handleAddToCart={handleAddToCart}
       />
-      <CartContainer cartData={cartItems} />
+      <CheckoutContainer cartData={cartItems} />
     </div>
   );
 }

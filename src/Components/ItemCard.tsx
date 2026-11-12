@@ -9,7 +9,7 @@ interface ProductCardProps extends ClothingProduct {
 
 export default function ItemCard({
   name,
-  image, //add necessary fields as laid out by blackboard
+  image,
   productInfo,
   handleQuantityAdjust,
   handleAddToCart,
@@ -18,7 +18,11 @@ export default function ItemCard({
     <div className="ItemCard">
       <h2> {name} </h2>
       <img src={image} alt="" height="100px" />
-      <p> {productInfo} </p> //display necessary fields as per blackboard here
+      <span>
+        {" "}
+        {productInfo.fit}, {productInfo.category}, {productInfo.color},
+        {productInfo.description}, {productInfo.size}, {productInfo.price}
+      </span>{" "}
       <button onClick={() => handleQuantityAdjust(-1)}>{" - "}</button>
       <span>{productInfo.quantity}</span>
       <button onClick={() => handleQuantityAdjust(+1)}>{" - "}</button>

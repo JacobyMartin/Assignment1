@@ -3,7 +3,7 @@ import CheckoutCard from "./CheckoutCard";
 
 interface CheckoutContainerProps {
   cartData: CartItem[];
-  handleRemoveCartItem: (id:string) => void; 
+  handleRemoveCartItem: (id: string) => void;
 }
 
 export default function CheckoutContainer({
@@ -13,7 +13,11 @@ export default function CheckoutContainer({
   return (
     <div className="CheckoutContainer">
       {cartData.map((item) => (
-        <CheckoutCard key={item.id} {...item} removeCheckoutItem={handleRemoveCartItem}/>
+        <CheckoutCard
+          key={item.id}
+          {...item}
+          removeCheckoutItem={handleRemoveCartItem}
+        />
       ))}
       <h2>
         {cartData.length > 0

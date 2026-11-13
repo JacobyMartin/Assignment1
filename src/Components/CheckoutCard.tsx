@@ -1,7 +1,7 @@
 import type { CartItem } from "./ThriftHappens";
 
-interface CheckoutCardProps extends CartItem{
-  removeCheckoutItem: (id:string) => void; 
+interface CheckoutCardProps extends CartItem {
+  removeCheckoutItem: (id: string) => void;
 }
 
 export default function CheckoutCard({

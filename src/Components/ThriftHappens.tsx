@@ -36,6 +36,7 @@ export interface ProductInfo {
 export interface CartItem {
   // A new UUID identifies each cart entry
   id: string;
+  productId: number;
   image: string;
   name: string;
   quantity: number;
@@ -62,10 +63,7 @@ export default function ThriftHappens({ data }: ClothingData) {
   //start with empty cart
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-
-
   // HANDLERS //////////////////////////////////////
-
 
   //delta represents the change in value for the cart/add to btn...
   //this function uses the latest state, creates a new array using map,
@@ -74,7 +72,13 @@ export default function ThriftHappens({ data }: ClothingData) {
     setProductInfo((prevData) =>
       prevData.map((info) =>
         info.id === id
-          ? { ...info, quantity: Math.max(0, Math.min(info.remQuantity + delta)) }
+          ? {
+              ...info,
+              quantity: Math.max(
+                0,
+                Math.min(info.remQuantity, info.quantity + delta),
+              ),
+            }
           : info,
       ),
     );
@@ -84,14 +88,23 @@ export default function ThriftHappens({ data }: ClothingData) {
     setCartItems((prevCart) => {
       return [...prevCart, { ...cartItem }];
     });
+
+    setProductInfo((prevData) =>
+      prevData.map((info) =>
+        info.id === cartItem.productId
+          ? {
+              ...info,
+              remQuantity: info.remQuantity - cartItem.quantity,
+              quantity: 0,
+            }
+          : info,
+      ),
+    );
   }
 
-  function handleRemoveCartItem(id:string){
-    setCartItems((prevCart) => 
-      prevCart.filter((item) => item.id !== id)
-  ); 
+  function handleRemoveCartItem(id: string) {
+    setCartItems((prevCart) => prevCart.filter((item) => item.id !== id));
   }
-
 
   ///////////////////////////////////////////////
   //sends info to ItemContainer and CheckoutContainer, div ThriftHappens to adjust layout of page.
@@ -103,7 +116,10 @@ export default function ThriftHappens({ data }: ClothingData) {
         handleQuantityAdjust={handleQuantityAdjust}
         handleAddToCart={handleAddToCart}
       />
-      <CheckoutContainer cartData={cartItems} handleRemoveCartItem={handleRemoveCartItem} />
+      <CheckoutContainer
+        cartData={cartItems}
+        handleRemoveCartItem={handleRemoveCartItem}
+      />
     </div>
   );
 }

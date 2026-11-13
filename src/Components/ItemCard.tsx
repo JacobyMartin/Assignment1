@@ -43,6 +43,7 @@ export default function ItemCard({
         onClick={() =>
           handleAddToCart({
             id: crypto.randomUUID(),
+            productId: productInfo.id,
             name,
             image: productInfo.image,
             price: productInfo.price,

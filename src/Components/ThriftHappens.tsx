@@ -56,7 +56,7 @@ export default function ThriftHappens({ data }: ClothingData) {
       description: data.description,
       size: data.size,
       quantity: data.itemQuantity, //selected quantity
-      remQuantity: data.quantity,
+      remQuantity: data.quantity, //stock quantity
       price: data.price,
     })),
   );
@@ -76,8 +76,12 @@ export default function ThriftHappens({ data }: ClothingData) {
           ? {
               ...info,
               quantity: Math.max(
+                //handles validation of stock/quant adjuster
                 0,
                 Math.min(info.remQuantity, info.quantity + delta),
+                //treated as second num of mathMax, which returns the lowest of either stock
+                //quantity or what the user selects. so if they try to click counter past
+                //remaining stock the button will still show according to how much stock there is
               ),
             }
           : info,
@@ -138,6 +142,24 @@ export default function ThriftHappens({ data }: ClothingData) {
     );
   }
 
+  function handleEmptyCart(items: CartItem[]) {
+    setProductInfo((prevData) =>
+      prevData.map((info) => {
+        const cartItem = items.find((item) => item.productId === info.id); //finds cartItems with ids that match stock/catalog
+
+        //returns cartItems quantity back to the total stock count
+        return cartItem
+          ? {
+              ...info,
+              remQuantity: info.remQuantity + cartItem.quantity,
+            }
+          : info;
+      }),
+    );
+
+    setCartItems([]); // fresh cart array
+  }
+
   ///////////////////////////////////////////////
   //sends info to ItemContainer and CheckoutContainer, div ThriftHappens to adjust layout of page.
   return (
@@ -151,6 +173,7 @@ export default function ThriftHappens({ data }: ClothingData) {
       <CheckoutContainer
         cartData={cartItems}
         handleRemoveCartItem={handleRemoveCartItem}
+        handleEmptyCart={handleEmptyCart}
       />
     </div>
   );

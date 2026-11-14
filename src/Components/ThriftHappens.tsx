@@ -36,6 +36,7 @@ export interface ProductInfo {
 export interface CartItem {
   // A new UUID identifies each cart entry
   id: string;
+  //productId links to original product id instead of unique UUID for transactions
   productId: number;
   image: string;
   name: string;
@@ -54,7 +55,7 @@ export default function ThriftHappens({ data }: ClothingData) {
       color: data.color,
       description: data.description,
       size: data.size,
-      quantity: data.itemQuantity,
+      quantity: data.itemQuantity, //selected quantity
       remQuantity: data.quantity,
       price: data.price,
     })),
@@ -65,7 +66,7 @@ export default function ThriftHappens({ data }: ClothingData) {
 
   // HANDLERS //////////////////////////////////////
 
-  //delta represents the change in value for the cart/add to btn...
+  //delta represents the change in value for the cart/add to btn... not remQuantity which is how much stock there is
   //this function uses the latest state, creates a new array using map,
   // and spreads copies only matching the object being clicked
   function handleQuantityAdjust(id: number, delta: number) {
@@ -85,7 +86,25 @@ export default function ThriftHappens({ data }: ClothingData) {
   }
   //spreads a new array and copies the submitted CartItem snapshot
   function handleAddToCart(cartItem: CartItem) {
+    if (cartItem.quantity === 0) {
+      return;
+    } //checks if there is zero stock, if there is, nothing is added to cart
+
     setCartItems((prevCart) => {
+      const existingCartItem = prevCart.find(
+        (item) => item.productId === cartItem.productId,
+      ); // function to find if the cartItem is already in the cart,,, if it is we will increment the existing item if it isn't then add it
+      if (existingCartItem) {
+        return prevCart.map((item) =>
+          item.productId === cartItem.productId
+            ? {
+                ...item,
+                quantity: item.quantity + cartItem.quantity, //if existingCartItem is found, merge quantites and total
+                total: item.total + cartItem.total,
+              }
+            : item,
+        );
+      }
       return [...prevCart, { ...cartItem }];
     });
 
@@ -102,8 +121,21 @@ export default function ThriftHappens({ data }: ClothingData) {
     );
   }
 
-  function handleRemoveCartItem(id: string) {
-    setCartItems((prevCart) => prevCart.filter((item) => item.id !== id));
+  function handleRemoveCartItem(cartItem: CartItem) {
+    setCartItems((prevCart) =>
+      prevCart.filter((item) => item.id !== cartItem.id),
+    );
+
+    setProductInfo((prevData) =>
+      prevData.map((info) =>
+        info.id === cartItem.productId
+          ? {
+              ...info,
+              remQuantity: info.remQuantity + cartItem.quantity,
+            }
+          : info,
+      ),
+    );
   }
 
   ///////////////////////////////////////////////

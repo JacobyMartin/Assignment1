@@ -5,7 +5,8 @@ import { products } from "./data/data";
 function App() {
   return (
     <>
-      <h1> Thrift Happens </h1>
+      <img src="src\assets\images\logo.png" alt="" width="200px"></img>
+      <h1>Thrift Happens</h1>
       <ThriftHappens data={products} />
     </>
   );

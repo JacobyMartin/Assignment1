@@ -3,7 +3,7 @@ import CheckoutCard from "./CheckoutCard";
 
 interface CheckoutContainerProps {
   cartData: CartItem[];
-  handleRemoveCartItem: (id: string) => void;
+  handleRemoveCartItem: (cartItem: CartItem) => void;
 }
 
 export default function CheckoutContainer({
@@ -24,7 +24,7 @@ export default function CheckoutContainer({
           ? `Cart total: ${cartData.reduce((acc, item) => acc + item.total, 0).toFixed(2)}$`
           : "Cart is empty"}
       </h2>
-      <button>Empty Cart</button>
+      <button> Empty Cart</button>
     </div>
   );
 }

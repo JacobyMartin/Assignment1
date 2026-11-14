@@ -7,16 +7,14 @@ interface ProductCardProps extends ClothingProduct {
   handleAddToCart: (cartItem: CartItem) => void;
 }
 export default function ItemCard({
-  name,
-  image,
   productInfo,
   handleQuantityAdjust,
   handleAddToCart,
 }: ProductCardProps) {
   return (
     <div className="ItemCard">
-      <h2> {name} </h2>
-      <img src={image} alt="" height="100px" />
+      <h2> {productInfo.name} </h2>
+      <img src={productInfo.image} alt="" height="100px" />
       <p>
         <strong>Fit:</strong> {productInfo.fit},
       </p>
@@ -33,6 +31,7 @@ export default function ItemCard({
       <p>
         <strong>Quantity:</strong> {productInfo.remQuantity}
       </p>
+      {productInfo.remQuantity === 0 && <p>Out of Stock</p>}
       <p>
         <strong>Price:</strong> {productInfo.price}
       </p>
@@ -44,7 +43,7 @@ export default function ItemCard({
           handleAddToCart({
             id: crypto.randomUUID(),
             productId: productInfo.id,
-            name,
+            name: productInfo.name,
             image: productInfo.image,
             price: productInfo.price,
             quantity: productInfo.quantity,
